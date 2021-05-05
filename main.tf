@@ -2,8 +2,8 @@ resource "random_uuid" "bucket_uuid" {}
 resource "random_uuid" "lambda_uuid" {}
 
 locals {
-  bucket_name = var.bucket_name == "" ? "${var.bucket_prefix}-${random_uuid.bucket_uuid.result}" : ""
-  lambda_name = var.lambda_name == "" ? "${var.lambda_prefix}-${random_uuid.lambda_uuid.result}" : ""
+  bucket_name = var.bucket_name == "" ? "${var.bucket_prefix}-${random_uuid.bucket_uuid.result}" : var.bucket_name
+  lambda_name = var.lambda_name == "" ? "${var.lambda_prefix}-${random_uuid.lambda_uuid.result}" : var.lambda_name
 }
 
 
