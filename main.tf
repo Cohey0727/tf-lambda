@@ -13,9 +13,9 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = locals.bucket_name
+  bucket = local.bucket_name
   acl    = "private"
-  tags   = { Name = locals.bucket_name }
+  tags   = { Name = local.bucket_name }
   versioning { enabled = false }
 }
 
@@ -55,7 +55,7 @@ resource "aws_s3_bucket_object" "lambda_source" {
 }
 
 resource "aws_lambda_function" "lambda_function" {
-  function_name = locals.lambda_name
+  function_name = local.lambda_name
   role          = aws_iam_role.lambda.arn
   handler       = "main.handler"
   runtime       = "python3.8"
