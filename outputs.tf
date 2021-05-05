@@ -59,7 +59,7 @@ output "lambda_version" {
   value       = aws_lambda_function.lambda_function.version
   description = "Latest published version of your Lambda Function."
 }
-output "lambda_vpc_config.vpc_id" {
+output "lambda_vpc_config_vpc_id" {
   value       = aws_lambda_function.lambda_function.vpc_config.vpc_id
   description = "ID of the VPC."
 }
