@@ -1,9 +1,11 @@
-resource "random_uuid" "bucket_uuid" {}
-resource "random_uuid" "lambda_uuid" {}
+resource "random_string" "uniq_string" {
+  length  = 16
+  special = false
+}
 
 locals {
-  bucket_name = var.bucket_name == "" ? "${var.app_name}-${random_uuid.bucket_uuid.result}" : var.bucket_name
-  lambda_name = var.lambda_name == "" ? "${var.app_name}-${random_uuid.lambda_uuid.result}" : var.lambda_name
+  bucket_name = var.bucket_name == "" ? "${var.app_name}-${random_string.uniq_string.result}" : var.bucket_name
+  lambda_name = var.lambda_name == "" ? "${var.app_name}-${random_string.uniq_string.result}" : var.lambda_name
 }
 
 
