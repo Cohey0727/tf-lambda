@@ -7,14 +7,9 @@ variable "aws_profile" {
 }
 
 
-variable "bucket_prefix" {
+variable "app_name" {
   default = "tflambda"
 }
-
-variable "lambda_prefix" {
-  default = "tflambda"
-}
-
 
 variable "bucket_name" {
   type    = string
