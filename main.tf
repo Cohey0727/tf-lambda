@@ -1,5 +1,6 @@
 resource "random_string" "uniq_string" {
   length  = 16
+  lower = true
   special = false
 }
 
