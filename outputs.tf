@@ -23,6 +23,11 @@ output "s3_bucket_website_domain" {
   value = aws_s3_bucket.s3_bucket.website_domain
 }
 
+
+output "lambda_function_name" {
+  value       = aws_lambda_function.lambda_function.function_name
+  description = "Unique name for your Lambda Function."
+}
 output "lambda_arn" {
   value       = aws_lambda_function.lambda_function.arn
   description = "Amazon Resource Name (ARN) identifying your Lambda Function."
