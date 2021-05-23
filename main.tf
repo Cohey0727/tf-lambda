@@ -1,6 +1,6 @@
 resource "random_string" "uniq_string" {
   length  = 16
-  upper = false
+  upper   = false
   special = false
 }
 
@@ -23,23 +23,9 @@ resource "aws_s3_bucket" "s3_bucket" {
 }
 
 
-resource "aws_iam_role" "lambda" {
-  name               = "iam_for_lambda"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+resource "aws_iam_role" "default-role" {
+  name               = "test-tf-deploy-dev"
+  assume_role_policy = "{\"Version\": \"2012-10-17\", \"Statement\": [{\"Sid\": \"\", \"Effect\": \"Allow\", \"Principal\": {\"Service\": \"lambda.amazonaws.com\"}, \"Action\": \"sts:AssumeRole\"}]}"
 }
 
 data "archive_file" "initial_lambda_package" {
@@ -57,13 +43,22 @@ resource "aws_s3_bucket_object" "lambda_source" {
   source = "${path.module}/.temp_files/empty.zip"
 }
 
+resource "aws_iam_role_policy" "default-role" {
+  name   = "default-rolePolicy"
+  policy = "{\"Version\": \"2012-10-17\", \"Statement\": [{\"Effect\": \"Allow\", \"Action\": [\"logs:CreateLogGroup\", \"logs:CreateLogStream\", \"logs:PutLogEvents\"], \"Resource\": \"arn:*:logs:*:*:*\"}]}"
+  role   = aws_iam_role.default-role.id
+}
+
 resource "aws_lambda_function" "lambda_function" {
   function_name = local.lambda_name
-  role          = aws_iam_role.lambda.arn
-  handler       = "main.handler"
   runtime       = "python3.8"
-  timeout       = 120
+  handler       = "main.handler"
+  memory_size   = 128
+  timeout       = 60
+  role          = aws_iam_role.default-role.arn
   publish       = true
-  s3_bucket     = aws_s3_bucket.s3_bucket.id
   s3_key        = aws_s3_bucket_object.lambda_source.id
+  tags = {
+    app_name = var.app_name
+  }
 }
