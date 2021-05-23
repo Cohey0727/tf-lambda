@@ -58,6 +58,7 @@ resource "aws_lambda_function" "lambda_function" {
   timeout       = 60
   role          = aws_iam_role.lambda_role.arn
   publish       = true
+  s3_bucket     = aws_s3_bucket.s3_bucket.id
   s3_key        = aws_s3_bucket_object.lambda_source.id
   tags = {
     app_name = var.app_name
